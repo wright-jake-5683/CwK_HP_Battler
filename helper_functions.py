@@ -29,25 +29,25 @@ def generateStartingWizards(team):
             case 1:
                 name = input("Please give this new member of Gryffindor a name: \n")
                 wiz = wizards.Gryffindor(name)
-                team[wiz.name] = wiz
+                team.append(wiz)
                 count += 1
                 print()
             case 2:
                 name = input("Please give this new member of Slytherin a name: \n")
                 wiz = wizards.Slytherin(name)
-                team[wiz.name] = wiz
+                team.append(wiz)
                 count += 1
                 print()
             case 3:
                 name = input("Please give this new member of Hufflepuff a name: \n")
                 wiz = wizards.Hufflepuff(name)
-                team[wiz.name] = wiz
+                team.append(wiz)
                 count += 1
                 print()
             case 4:
                 name = input("Please give this new member of Ravenclaw a name: \n")
                 wiz = wizards.Ravenclaw(name)
-                team[wiz.name] = wiz
+                team.append(wiz)
                 count += 1
                 print()
     return team
@@ -60,24 +60,24 @@ def explorePrep(team):
             print("------------------------------")
             team = generateStartingWizards(team)
             print("\nGreat, here is your team: \n ")
-            for wizard in team.values():
+            for wizard in team:
                 print(f"{wizard.name} - House: {wizard.house}")
                 print("--------------------------------")
 
         ready = input("Are you ready to explore? (Y/N)\n")
         if (ready.upper().strip() == "Y"):
-            explore = True
-            return explore, team
+            action = "Explore"
+            return action, team
         elif (ready.upper().strip() == "N"):
-            explore = False
-            return explore, team
+            action = ""
+            return action, team
         else:
             print("Please enter 'Y' if you are ready to explore and 'N' if you would like to stay in the main lobby \n")
 
 #---------------------------------------------------------------
 
 def viewTeam():
-    pass
+    print("This functionality has not been implemented yet. Please come back another time.")
 
 #---------------------------------------------------------------
 
@@ -92,6 +92,43 @@ def mainLobby(team):
     
     match (optionSelected):
         case 1: 
-            action, team = explorePrep(team)
+            return explorePrep(team)
         case 2:
             viewTeam()
+
+#---------------------------------------------------------------
+
+def startFight(team):
+    enemy = generateDeathEater()
+    print("A Death Eater has appeared...")
+    print("Chose the team member you would like to fight with by typing their corresponding number")
+    for character in team:
+        print(f"{team.index(character) + 1}). {character.name}")
+    selection = int(input())
+    character = team[selection - 1]
+    print("Choose a move to attack by entering it's number...")
+    move = playerMove(character)
+    print(f"You used {move}...")
+    enemyMove = opponentMove(enemy)
+    print(f"The Death Eater used {enemyMove}...")
+
+
+
+#---------------------------------------------------------------
+
+def playerMove(character):
+    for move in character.moveSet:
+        print(f"{character.moveSet.index(move) + 1}). {move}")
+    selection = input().lower().strip()
+    move = character.moveSet[selection]
+    return move
+
+#---------------------------------------------------------------
+
+def opponentMove(enemy):
+    r = random.randint(0,1)
+    if (r == 0):
+        move = enemy.moveSet[r]
+    elif (r == 1):
+        move = enemy.moveSet[r]
+    return move
