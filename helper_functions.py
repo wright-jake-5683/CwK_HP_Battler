@@ -76,15 +76,16 @@ def explorePrep(team):
 
 #---------------------------------------------------------------
 
-def viewTeam():
+def viewTeam(team):
     print("This functionality has not been implemented yet. Please come back another time.")
+    return "", team
 
 #---------------------------------------------------------------
 
 def mainLobby(team):
     options = ["Explore", "View Team"]
 
-    print("Welcome to Hogwarts. Please select one of the following options by type its corresponding number value: \n")
+    print("Welcome to Hogwarts. Please select one of the following options by typing its corresponding number value: \n")
     for option in  options:
         print(f"{options.index(option) + 1}). {option}")
     print()
@@ -94,7 +95,7 @@ def mainLobby(team):
         case 1: 
             return explorePrep(team)
         case 2:
-            viewTeam()
+            viewTeam(team)
 
 #---------------------------------------------------------------
 
