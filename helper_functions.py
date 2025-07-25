@@ -126,9 +126,5 @@ def playerMove(character):
 #---------------------------------------------------------------
 
 def opponentMove(enemy):
-    r = random.randint(0,1)
-    if (r == 0):
-        move = enemy.moveSet[r]
-    elif (r == 1):
-        move = enemy.moveSet[r]
-    return move
+    r = random.randint(0, len(enemy.moveSet))
+    return enemy.moveSet[r]
