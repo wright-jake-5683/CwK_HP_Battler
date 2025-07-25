@@ -119,8 +119,8 @@ def startFight(team):
 def playerMove(character):
     for move in character.moveSet:
         print(f"{character.moveSet.index(move) + 1}). {move}")
-    selection = input().lower().strip()
-    move = character.moveSet[selection]
+    selection = int(input())
+    move = character.moveSet[selection - 1]
     return move
 
 #---------------------------------------------------------------
