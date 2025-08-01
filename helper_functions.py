@@ -80,8 +80,11 @@ def explorePrep(team):
 #---------------------------------------------------------------
 
 def viewTeam(team):
-    print("This functionality has not been implemented yet. Please come back another time.")
-    return "", team
+    for wizard in team:
+        print(f"{wizard.name} - Species: {wizard.house}")
+        print("--------------------------------")
+    action = ""
+    return action, team
 
 #---------------------------------------------------------------
 
@@ -99,7 +102,7 @@ def mainLobby(team):
             case 1: 
                 return explorePrep(team)
             case 2:
-                viewTeam(team)
+                return viewTeam(team)
     except ValueError:
         print("Please enter a valid integer corresponding to a valid option")
         return "", team
