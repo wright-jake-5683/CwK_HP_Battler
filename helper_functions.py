@@ -80,9 +80,12 @@ def explorePrep(team):
 #---------------------------------------------------------------
 
 def viewTeam(team):
-    for wizard in team:
-        print(f"{wizard.name} - Species: {wizard.house}")
-        print("--------------------------------")
+    if not team:
+        print("There are currently no wizards on your team")
+    else:
+        for wizard in team:
+            print(f"{wizard.name} - Species: {wizard.house}")
+            print("--------------------------------")
     action = ""
     return action, team
 
