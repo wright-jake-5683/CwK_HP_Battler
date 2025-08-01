@@ -43,16 +43,16 @@ class Wizard:
 
 class Gryffindor(Wizard):
     def __init__(self, name):
-        super().__init__(name, "Gryffindor", "Burst", "Curses", "LT Damage", ["Basic Cast", "Stupefy"])
+        super().__init__(name, "Gryffindor", "Burst", "Curses", "LT Damage", ["BasicCast", "Stupefy"])
 
 class Slytherin(Wizard):
     def __init__(self, name):
-        super().__init__(name, "Slytherin", "Curses", "Counter Spell", "Burst", ["Basic Cast", "Confringo"])
+        super().__init__(name, "Slytherin", "Curses", "Counter Spell", "Burst", ["BasicCast", "Confringo"])
 
 class Hufflepuff(Wizard):
     def __init__(self, name):
-        super().__init__(name, "Hufflepuff", "Counter Spell", "LT Damage", "Curses", ["Basic Cast", "Depulso"])
+        super().__init__(name, "Hufflepuff", "Counter Spell", "LT Damage", "Curses", ["BasicCast", "Depulso"])
 
 class Ravenclaw(Wizard):
     def __init__(self, name):
-        super().__init__(name, "Ravenclaw", "LT Damage", "Burst", "Counter Spell", ["Basic Cast", "Incendio"])
+        super().__init__(name, "Ravenclaw", "LT Damage", "Burst", "Counter Spell", ["BasicCast", "Incendio"])

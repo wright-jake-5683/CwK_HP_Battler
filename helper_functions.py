@@ -1,5 +1,6 @@
 import random
 import wizards
+import moves
 
 def generateDeathEater():
     r = random.randint(1,4)
@@ -55,24 +56,26 @@ def generateStartingWizards(team):
 #---------------------------------------------------------------
 
 def explorePrep(team):
-        if len(team) < 3:
-            print(f"It appears you only have {len(team)} wizards on your team to go exploring with. Please select more Wizards to start with \n")
-            print("------------------------------")
-            team = generateStartingWizards(team)
-            print("\nGreat, here is your team: \n ")
-            for wizard in team:
-                print(f"{wizard.name} - House: {wizard.house}")
-                print("--------------------------------")
+        while (True):
+            if len(team) < 3:
+                print(f"It appears you only have {len(team)} wizards on your team to go exploring with. Please select more Wizards to start with \n")
+                print("------------------------------")
+                team = generateStartingWizards(team)
+                print("\nGreat, here is your team: \n ")
+                for wizard in team:
+                    print(f"{wizard.name} - House: {wizard.house}")
+                    print("--------------------------------")
 
-        ready = input("Are you ready to explore? (Y/N)\n")
-        if (ready.upper().strip() == "Y"):
-            action = "Explore"
-            return action, team
-        elif (ready.upper().strip() == "N"):
-            action = ""
-            return action, team
-        else:
-            print("Please enter 'Y' if you are ready to explore and 'N' if you would like to stay in the main lobby \n")
+            ready = input("Are you ready to explore? (Y/N)\n")
+            if (ready.upper().strip() == "Y"):
+                action = "Explore"
+                return action, team
+            elif (ready.upper().strip() == "N"):
+                action = ""
+                return action, team
+            else:
+                print("Please enter 'Y' if you are ready to explore and 'N' if you would like to stay in the main lobby \n")
+
 
 #---------------------------------------------------------------
 
@@ -89,29 +92,61 @@ def mainLobby(team):
     for option in  options:
         print(f"{options.index(option) + 1}). {option}")
     print()
-    optionSelected = int(input())
-    
-    match (optionSelected):
-        case 1: 
-            return explorePrep(team)
-        case 2:
-            viewTeam(team)
+    try:
+        optionSelected = int(input())
+        
+        match (optionSelected):
+            case 1: 
+                return explorePrep(team)
+            case 2:
+                viewTeam(team)
+    except ValueError:
+        print("Please enter a valid integer corresponding to a valid option")
+        return "", team
 
 #---------------------------------------------------------------
 
-def startFight(team):
-    enemy = generateDeathEater()
-    print("A Death Eater has appeared...")
-    print("Chose the team member you would like to fight with by typing their corresponding number")
-    for character in team:
-        print(f"{team.index(character) + 1}). {character.name}")
-    selection = int(input())
-    character = team[selection - 1]
-    print("Choose a move to attack by entering it's number...")
-    move = playerMove(character)
-    print(f"You used {move}...")
-    enemyMove = opponentMove(enemy)
-    print(f"The Death Eater used {enemyMove}...")
+def startFight(team, fight):
+        enemy = generateDeathEater()
+        print(f"A Death Eater has appeared...")
+        print("------------------------------")
+        print("Chose the wizard you would like to fight with by typing their corresponding number")
+        for character in team:
+            print(f"{team.index(character) + 1}). {character.name}")
+        selection = int(input())
+        character = team[selection - 1]
+        print(f"{character.name}'s health: {character.health}")
+        print(f"Death Eater's health: {enemy.health}")
+        print("------------------------------")
+
+        while(fight):
+            print("Choose a move to attack by entering it's number...")
+            move = playerMove(character)
+            enemyMove = opponentMove(enemy)
+            enemy.calculateDamage(move, character.attack, character.name)
+            character.calculateDamage(enemyMove, enemy.attack, enemy.name)
+            print(f"{character.name}'s health: {character.health}")
+            print(f"Death Eater's health: {enemy.health}")
+            print("------------------------------")
+            if (character.health == 0 and enemy.health == 0):
+                print("Both parties have lost the fight...")
+                team.remove(character)
+                fight = False
+                result = "lost"
+            elif (enemy.health == 0):
+                print("Enemy has been defeated...")
+                print(f"You have saved a new wizard of house {enemy.house}. Please give this new teammate a nickname:")
+                name = input()
+                wiz = acquireWizard(enemy, name)
+                team.append(wiz)
+                fight = False
+                result = "won"
+            elif (character.health == 0):
+                print("You have been defeated...")
+                team.remove(character)
+                fight = False
+                result = "lost"
+        return result
 
 
 
@@ -121,11 +156,22 @@ def playerMove(character):
     for move in character.moveSet:
         print(f"{character.moveSet.index(move) + 1}). {move}")
     selection = int(input())
-    move = character.moveSet[selection - 1]
-    return move
+    if (selection in range(len(character.moveSet) + 1)):
+        move = getattr(moves, character.moveSet[selection - 1])
+    else:
+        print(f"Value entered is out of range of available move options. Defaulting to basic move...")
+        move = getattr(moves, character.moveSet[0])
+    return move(character.strength)
 
 #---------------------------------------------------------------
 
 def opponentMove(enemy):
-    r = random.randint(0, len(enemy.moveSet))
-    return enemy.moveSet[r]
+    r = random.randint(0, len(enemy.moveSet) - 1)
+    move = getattr(moves, enemy.moveSet[r])
+    return move(enemy.strength)
+
+#---------------------------------------------------------------
+
+def acquireWizard(enemy, name):
+    wiz = getattr(wizards, enemy.house)
+    return wiz(name)
