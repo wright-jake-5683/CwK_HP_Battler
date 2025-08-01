@@ -12,7 +12,7 @@ while (play == True):
         case "Explore":
             while (action == "Explore"):
                 if not team:
-                    print("You have no wizards left on your team, returning to Hogwarts...")
+                    print("You have no wizards on your team, returning to Hogwarts...")
                     action = ""
                 else:
                     hf.startFight(team, True)
