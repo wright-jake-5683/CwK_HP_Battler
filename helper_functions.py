@@ -100,12 +100,14 @@ def mainLobby(team):
     print()
     try:
         optionSelected = int(input())
-        
-        match (optionSelected):
-            case 1: 
-                return explorePrep(team)
-            case 2:
-                return viewTeam(team)
+        if (optionSelected in range(len(options) + 1) and isinstance(optionSelected, int)):
+            match (optionSelected):
+                case 1: 
+                    return explorePrep(team)
+                case 2:
+                    return viewTeam(team)
+        else:
+            return "", team
     except ValueError:
         print("Please enter a valid integer corresponding to a valid option")
         return "", team
